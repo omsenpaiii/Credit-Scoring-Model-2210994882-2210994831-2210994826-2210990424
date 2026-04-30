@@ -1,37 +1,67 @@
-# SIT723 Credit Scoring and PaddleOCR Pilot
+# AI-Powered Credit Scoring and Document OCR System for Loan Risk Assessment
 
-This workspace implements a supervisor-ready SIT723 progress package with:
+## Team Details
 
-- credit-scoring pilot experiments on German Credit and a public Lending Club sample
-- a PaddleOCR-oriented OCR pilot workflow for document-intake experimentation
-- report and email generation driven by saved experiment artifacts
+| Name | Roll Number |
+|---|---:|
+| Om Tomar | 2210994882 |
+| Sahajpal Singh | 2210994831 |
+| Ridhima Chopra | 2210994826 |
+| Ishpreet Kaur | 2210990424 |
 
-## Quick start
+## Project Details
 
-Use the bundled Python runtime plus the local dependency folder:
+- **Project type:** Copyright
+- **Supervisor/Mentor:** Lalit Sharma
+- **Department:** Computer Science and Engineering, Chitkara University
+- **Current status:** Final CO-OP submission package prepared for external evaluation
+
+## Repository Structure
+
+| Folder | Contents |
+|---|---|
+| `IPR Submission Proof` | Placeholder for the copyright submission form and screenshot. |
+| `Report and PPT` | Final report, presentation, original templates, generated markdown, and supporting figures. |
+| `Source code` | Runnable Python source code, configs, tests, data samples, third-party OCR resources, and saved experiment artifacts. |
+
+## Highlights
+
+- Credit-scoring benchmark on German Credit and Lending Club sample datasets.
+- Models: Logistic Regression, Random Forest, Gradient Boosting, and Multi-Layer Perceptron.
+- Saved metrics: ROC-AUC, PR-AUC, precision, recall, F1-score, accuracy, confusion matrices, ROC/PR curves, and feature-importance plots.
+- Controlled synthetic PaddleOCR benchmark included to demonstrate document-intake improvement after domain fine-tuning.
+- Best saved results: German Credit ROC-AUC `0.831`, Lending Club sample ROC-AUC `0.722`.
+
+## Run Instructions
+
+From the repository root:
 
 ```bash
-PYTHONPATH="/Users/macbook/Downloads/Credit Scoring Model/.deps:/Users/macbook/Downloads/Credit Scoring Model/src" \
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 run_credit_benchmark.py --config configs/credit/benchmark_suite.json
+cd "Source code"
+python3 -m pip install -r requirements.txt
+PYTHONPATH="src" python3 tests/smoke_test.py
 ```
 
-Then generate the report package:
+Run the full credit-scoring benchmark:
 
 ```bash
-PYTHONPATH="/Users/macbook/Downloads/Credit Scoring Model/.deps:/Users/macbook/Downloads/Credit Scoring Model/src" \
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/generate_report.py
+cd "Source code"
+PYTHONPATH="src" python3 run_credit_benchmark.py --config configs/credit/benchmark_suite.json
 ```
 
-## Structure
+Regenerate the final report and presentation:
 
-- `src/credit_scoring`: data download, preprocessing, training, evaluation, explainability
-- `src/document_ocr`: synthetic OCR data generation and PaddleOCR experiment orchestration
-- `configs`: JSON experiment configs
-- `artifacts`: generated metrics, plots, and sample predictions
-- `report`: generated progress report and supervisor email draft
+```bash
+PYTHONPATH="Source code/src" python3 "Source code/scripts/generate_final_submission.py"
+```
 
-## Notes
+## Final Evaluation Files
 
-- Credit-scoring results are intended to be real pilot results only.
-- The Lending Club pilot uses a manageable public sample rather than the full paper-scale dataset.
-- The OCR runner is designed for a tiny synthetic fine-tuning pilot so results remain clearly preliminary.
+- `Report and PPT/Final_COOP2_Project_Report.docx`
+- `Report and PPT/Final_COOP2_External_Presentation.pptx`
+- `Report and PPT/Final_COOP2_Project_Report.md`
+- `Report and PPT/figures/`
+
+## IPR Note
+
+This repository is structured for a copyright-targeted submission. The actual copyright application form and submission screenshot must be added to `IPR Submission Proof` after the team completes the official filing process.
