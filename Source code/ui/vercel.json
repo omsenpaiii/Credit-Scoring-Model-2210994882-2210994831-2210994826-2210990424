@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/**/*.py": {
+      "excludeFiles": "{node_modules/**,.next/**,data/ocr_run_summary.json,data/benchmark_summary.csv,**/*.png,**/*.jpg,**/*.pdf}"
+    }
+  }
+}

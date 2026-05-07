@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --ink: #111827;
+  --paper: #f7f3ea;
+  --panel: #fffaf0;
+  --teal: #0f766e;
+  --coral: #e85d75;
+  --amber: #d97706;
+  --violet: #6d5bd0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(232, 93, 117, 0.16), transparent 26rem),
+    radial-gradient(circle at 86% 8%, rgba(15, 118, 110, 0.15), transparent 30rem),
+    linear-gradient(180deg, #fffaf0 0%, #f7f3ea 46%, #ffffff 100%);
+  color: var(--ink);
+  font-family: var(--font-sans), Inter, system-ui, sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(17, 24, 39, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 24, 39, 0.07) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: linear-gradient(to bottom, black, transparent 76%);
+}
+
+.glass-panel {
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  background: rgba(255, 250, 240, 0.78);
+  box-shadow: 0 20px 70px rgba(17, 24, 39, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.metric-ring {
+  background:
+    conic-gradient(var(--ring-color) calc(var(--value) * 1%), rgba(17, 24, 39, 0.08) 0),
+    #fffaf0;
+}
+
+.metric-ring::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 999px;
+  background: #fffaf0;
+}
+
+.animated-scan {
+  animation: scan 3.8s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0%,
+  100% {
+    transform: translateY(-12%);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(132%);
+    opacity: 0.9;
+  }
+}
+
+.float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
