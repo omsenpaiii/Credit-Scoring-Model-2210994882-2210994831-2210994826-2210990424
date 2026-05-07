@@ -145,7 +145,23 @@ def _trained_model():
     model = LogisticRegression(max_iter=1500, solver="lbfgs", class_weight="balanced", random_state=42)
     pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
     pipeline.fit(_matrix(rows, feature_names), y)
-    return pipeline, feature_names, _defaults(rows, feature_names)
+    transformed_names = _transformed_feature_names(pipeline, feature_names, numeric_indices, categorical_indices)
+    return pipeline, feature_names, _defaults(rows, feature_names), transformed_names
+
+
+def _transformed_feature_names(
+    pipeline: Pipeline,
+    feature_names: list[str],
+    numeric_indices: list[int],
+    categorical_indices: list[int],
+) -> list[str]:
+    preprocessor = pipeline.named_steps["preprocessor"]
+    names = [feature_names[index] for index in numeric_indices]
+    encoder = preprocessor.named_transformers_["cat"].named_steps["encoder"]
+    for feature_index, categories in zip(categorical_indices, encoder.categories_):
+        field = feature_names[feature_index]
+        names.extend(f"{field}: {category}" for category in categories)
+    return names
 
 
 def _profile(payload: dict[str, Any], feature_names: list[str], defaults: dict[str, Any]) -> dict[str, Any]:
@@ -160,23 +176,22 @@ def _profile(payload: dict[str, Any], feature_names: list[str], defaults: dict[s
     return {name: profile[name] for name in feature_names}
 
 
-def _feature_contributions(pipeline: Pipeline, row: list[Any]) -> list[dict[str, Any]]:
+def _feature_contributions(pipeline: Pipeline, row: list[Any], transformed_names: list[str]) -> list[dict[str, Any]]:
     preprocessor = pipeline.named_steps["preprocessor"]
     model = pipeline.named_steps["model"]
     transformed = preprocessor.transform([row])[0]
     coefficients = model.coef_[0]
-    names = preprocessor.get_feature_names_out()
     contributions = transformed * coefficients
     order = np.argsort(np.abs(contributions))[::-1][:6]
     result = []
     for index in order:
-        name = str(names[index]).replace("num__", "").replace("cat__", "").replace("_", " ")
+        name = transformed_names[index].replace("_", " ")
         result.append({"feature": name, "contribution": float(contributions[index])})
     return result
 
 
 def _score(payload: dict[str, Any]) -> dict[str, Any]:
-    pipeline, feature_names, defaults = _trained_model()
+    pipeline, feature_names, defaults, transformed_names = _trained_model()
     profile = _profile(payload, feature_names, defaults)
     row = [profile[name] for name in feature_names]
     probability = float(pipeline.predict_proba([row])[0][1])
@@ -193,7 +208,7 @@ def _score(payload: dict[str, Any]) -> dict[str, Any]:
         "risk_probability": probability,
         "risk_band": band,
         "decision_summary": summary,
-        "top_contributions": _feature_contributions(pipeline, row),
+        "top_contributions": _feature_contributions(pipeline, row, transformed_names),
     }
 
 
